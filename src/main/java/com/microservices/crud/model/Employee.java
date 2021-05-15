@@ -1,10 +1,13 @@
 package com.microservices.crud.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +31,11 @@ import lombok.Setter;
 @Table(name = "employees")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
+@EqualsAndHashCode
+@Embeddable
+public class Employee implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	@Column(name = "emp_no")
@@ -48,27 +56,29 @@ public class Employee {
 			orphanRemoval = true,
 			mappedBy = "employee", 
 			cascade = CascadeType.ALL,
-			fetch = FetchType.EAGER)
+			fetch = FetchType.LAZY)
+	@Embedded
 	private List<Department_Employee> dep_emp;
 	
 	@OneToMany(targetEntity = Salary.class,
 			orphanRemoval = true,
 			mappedBy = "employee", 
 			cascade = CascadeType.ALL, 
-			fetch = FetchType.EAGER )
+			fetch = FetchType.LAZY )
 	private List<Salary> salary;
 	
 	@OneToMany(targetEntity = Titles.class,
 			orphanRemoval = true,
 			mappedBy = "employee",
 			cascade = CascadeType.ALL,
-			fetch = FetchType.EAGER)
+			fetch = FetchType.LAZY)
 	private List<Titles> titles;
 	
 	@OneToMany(targetEntity = Department_Manager.class,
 			orphanRemoval = true,
 			mappedBy = "employee",
 			cascade = CascadeType.ALL,
-			fetch = FetchType.EAGER)
+			fetch = FetchType.LAZY)
+	@Embedded
 	private List<Department_Manager> dept_manager;
 }

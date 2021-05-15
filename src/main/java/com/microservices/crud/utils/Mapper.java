@@ -202,4 +202,17 @@ public class Mapper {
 		return titlesList;
 	}
 
+	public static Employee updateContents(EmployeeDTO dto, Employee employee) {
+		
+		employee.setBirth_date(new Date(dto.getBirth_date().getTime()));
+		employee.setFirst_name(dto.getFirst_name());
+		employee.setGender(dto.getGender());
+		employee.setLast_name(dto.getLast_name());
+		employee.setHire_date(new Date(dto.getHire_date().getTime()));
+		
+		
+		return employee;
+		
+	}
+
 }

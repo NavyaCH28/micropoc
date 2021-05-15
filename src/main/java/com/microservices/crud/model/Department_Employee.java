@@ -3,6 +3,7 @@ package com.microservices.crud.model;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Department_Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 

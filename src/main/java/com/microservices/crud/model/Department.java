@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 public class Department implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -37,10 +39,10 @@ public class Department implements Serializable {
 	@GeneratedValue
 	private String dept_no;
 
-	@OneToMany(targetEntity = Department_Employee.class, mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(targetEntity = Department_Employee.class, mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Department_Employee> dept_Emp;
 
-	@OneToMany(targetEntity = Department_Manager.class, mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(targetEntity = Department_Manager.class, mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Department_Manager> dept_Mngr;
 
 }

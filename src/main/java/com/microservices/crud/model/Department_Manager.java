@@ -19,7 +19,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 @Entity
 @Table(name = "dept_manager")
 @Builder
@@ -33,13 +32,13 @@ public class Department_Manager implements Serializable {
 	private Date to_date;
 
 	@ManyToOne
-	@JoinColumn(name = "emp_no")
 	@EmbeddedId
+	@JoinColumn(name = "emp_no")
 	private Employee employee;
 
 	@ManyToOne
-	@JoinColumn(name = "dept_no")
 	@EmbeddedId
+	@JoinColumn(name = "dept_no")
 	private Department department;
 
 }

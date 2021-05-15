@@ -1,8 +1,6 @@
 package com.microservices.crud.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeDTO updateEmployee(EmployeeDTO dto) {
-		// TODO Auto-generated method stub
+		Optional<Employee> emp = employeeRepository.findById(dto.getEmployeeId());
+		if (emp != null && emp.get() != null ) {
+			Employee updatedEmp = Mapper.updateContents(dto, emp.get());
+			Employee employee = employeeRepository.save(updatedEmp);
+			return Mapper.getEmployeeDTO(employee);
+		}
+		
 		return null;
 	}
 
@@ -40,6 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public String deleteEmployee(Integer id) {
 		try {
 			Optional<Employee> employee = employeeRepository.findById(id);
+			//employeeRepository.deleteById(id);
 			if (employee != null && employee.get() != null) {
 				employeeRepository.delete(employee.get());
 				return "Employee Deleted Successfully";
@@ -53,42 +58,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeDTO retrieveEmployee(Integer emp_id) {
-		try {
 			Optional<Employee> employee = employeeRepository.findById(emp_id);
 			if (employee != null && employee.get() != null) {
 				return Mapper.getEmployeeDTO(employee.get());
 			}
-		} catch (IllegalArgumentException ex) {
-			return null;
-		}
-		return null;
+		throw new RuntimeException();
 	}
 
 	@Override
 	public List<EmployeeDTO> findEmployees(String lastname, String birthDate, String gender) {
 		if (lastname != null && birthDate != null && gender != null) {
-			Date date;
-			try {
-				date = new SimpleDateFormat("yyyy-mm-dd").parse(birthDate);
-				System.out.println(date);
-				System.out.println(new java.sql.Date(date.getTime()));
-				List<Employee> employeeList = employeeRepository.findAll(Specification
-						.where(EmployeeRepository.hasLastName(lastname)).and(EmployeeRepository.hasGender(gender)));
 
-				System.out.print(
-						employeeRepository.findAll(Specification.where(EmployeeRepository.hasLastName(lastname))));
-				System.out.print(employeeRepository.findAll(Specification.where(EmployeeRepository.hasGender(gender))));
-				System.out.print(employeeRepository.findAll(
-						Specification.where(EmployeeRepository.hasBirthDate(new java.sql.Date(date.getTime())))));
+				System.out.println(Date.valueOf(birthDate));
+
+				List<Employee> employeeList = employeeRepository.findAll(Specification
+						.where(EmployeeRepository.hasLastName(lastname))
+						.and(EmployeeRepository.hasGender(gender))
+						.and(EmployeeRepository.hasBirthDate(Date.valueOf(birthDate))));
+
+				
 				return employeeList.stream().map(employee -> Mapper.getEmployeeDTO(employee))
 						.collect(Collectors.toList());
 
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
 		}
 
-		return null;
+		throw new RuntimeException();
 	}
 
 }
